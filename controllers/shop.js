@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Category = require('../models/category');
 
 function getOrder(sort) {
   switch (sort) {
@@ -24,6 +25,14 @@ exports.getProducts = (req, res, next) => {
     order, limit, offset
   }).then(products => {
     res.status(200).json(products);
+  }).catch(err => {
+    next(new Error(err));
+  });
+};
+
+exports.getCategories = (req, res, next) => {
+  Category.findAll().then(categories => {
+    res.status(200).json(categories);
   }).catch(err => {
     next(new Error(err));
   });

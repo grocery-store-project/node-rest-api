@@ -9,6 +9,14 @@ const Product = sequelize.define('product', {
         allowNull: false,
         primaryKey: true
     },
+    barCode: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     title: {
         type: Sequelize.STRING,
         allowNull: false
@@ -17,12 +25,20 @@ const Product = sequelize.define('product', {
         type: Sequelize.DOUBLE,
         allowNull: false
     },
+    priceType: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    vatRate: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+    },
     imageUrl: {
         type: Sequelize.STRING,
         allowNull: false
     },
     description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1234),
         allowNull: true
     }
 });
