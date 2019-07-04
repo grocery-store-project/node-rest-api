@@ -1,5 +1,8 @@
 const Product = require('../models/product');
 const Category = require('../models/category');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
+
 
 function getOrder(sort) {
   switch (sort) {
@@ -17,14 +20,26 @@ function getOrder(sort) {
 }
 
 exports.getProducts = (req, res, next) => {
+
   const order = getOrder(req.query.order);
   const limit = Number(req.query.limit) || 5;
   const page = req.query.page || 1;
   const offset = limit * (page - 1);
-  Product.findAll({
-    order, limit, offset
-  }).then(products => {
-    res.status(200).json(products);
+  const where = req.query.categoryId ? { categoryId: req.query.categoryId } : {};
+  if (req.query.filter) {
+    where.title = {
+      [Op.substring]: req.query.filter
+    };
+  }
+  console.log(where);
+
+
+  Product.findAndCountAll({
+    order, limit, offset, where
+  }).then(result => {
+    const products = result.rows;
+    const page_all = Math.ceil(result.count / limit)
+    res.status(200).json({ products, page_all });
   }).catch(err => {
     next(new Error(err));
   });

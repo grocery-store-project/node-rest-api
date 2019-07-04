@@ -27,7 +27,7 @@ exports.editProduct = (req, res, next) => {
         error.statusCode = 422;
         throw error;
     }
-    req.query.imageUrl = req.file.path.replace("\\", "/");
+    req.query.imageUrl = req.file.location;
     Product.update(req.query, { where: { id: req.params.productId } }).then(product => {
         res.status(201).json({ message: 'Product was edited successfully' });
     }).catch(err => {
