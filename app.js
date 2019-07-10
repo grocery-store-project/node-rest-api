@@ -9,6 +9,7 @@ const multerConfig = require('./util/multer')
 
 const shopRoutes = require('./routes/shop');
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 });
 app.use('/shop', shopRoutes);
 app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
