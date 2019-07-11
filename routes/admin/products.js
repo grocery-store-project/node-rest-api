@@ -1,8 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator/check');
 
-const adminController = require('../controllers/admin');
-const isAuth = require('../middleware/is-auth');
+const adminProductsController = require('../../controllers/admin/products');
 
 
 const router = express.Router();
@@ -39,8 +38,8 @@ const productValidation = [
 
 ]
 
-router.post('/add-product', isAuth, productValidation, adminController.addProduct);
-router.post('/edit-product/:productId', isAuth, productValidation, adminController.editProduct);
-router.post('/delete-product/:productId', isAuth, adminController.deleteProduct);
+router.post('/add-product', productValidation, adminProductsController.addProduct);
+router.post('/edit-product/:productId', productValidation, adminProductsController.editProduct);
+router.post('/delete-product/:productId', adminProductsController.deleteProduct);
 
 module.exports = router;

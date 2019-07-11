@@ -8,8 +8,10 @@ const sequelize = require('./util/database');
 const multerConfig = require('./util/multer')
 
 const shopRoutes = require('./routes/shop');
-const adminRoutes = require('./routes/admin');
+const adminProductsRoutes = require('./routes/admin/products');
+const adminUsersRoutes = require('./routes/admin/users');
 const authRoutes = require('./routes/auth');
+const isAuth = require('./middleware/is-auth');
 
 const app = express();
 
@@ -23,7 +25,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/shop', shopRoutes);
-app.use('/admin', adminRoutes);
+app.use('/admin/products', isAuth, adminProductsRoutes);
+app.use('/admin/users', isAuth, adminUsersRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {

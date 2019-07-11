@@ -2,26 +2,13 @@ const Product = require('../models/product');
 const Category = require('../models/category');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
+const OrderHelper = require('../util/order');
 
 
-function getOrder(sort) {
-  switch (sort) {
-    case '1':
-      return [['price', 'ASC']];
-    case '2':
-      return [['price', 'DESC']];
-    case '3':
-      return [['createdAt', 'ASC']];
-    case '4':
-      return [['createdAt', 'DESC']];
-    default:
-      return [['id', 'ASC']];
-  }
-}
 
 exports.getProducts = (req, res, next) => {
 
-  const order = getOrder(req.query.order);
+  const order = OrderHelper.getOrder(req.query.order);
   const limit = Number(req.query.limit) || 5;
   const page = req.query.page || 1;
   const offset = limit * (page - 1);
