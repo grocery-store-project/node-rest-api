@@ -1,6 +1,37 @@
 const User = require('../../models/user');
 const OrderHelper = require('../../util/order');
+const { validationResult } = require('express-validator/check');
 
+exports.addUser = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            message: 'Validation failed, entered data is incorrect',
+            errors: errors.array()
+        })
+    }
+    User.create(req.query).then(user => {
+        res.status(201).json({ message: 'User was added successfully' });
+    }).catch(err => {
+        next(new Error(err));
+    });
+};
+
+exports.editUser = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            message: 'Validation failed, entered data is incorrect',
+            errors: errors.array()
+        })
+    }
+    User.update(req.body, { where: { id: req.params.userId } }).then(user => {
+        res.status(201).json({ message: 'User was edited successfully', user });
+    }).catch(err => {
+        next(new Error(err));
+    });
+};
 
 exports.deleteUser = (req, res, next) => {
     User.destroy({ where: { id: req.params.userId } }).then(() => {
@@ -9,7 +40,6 @@ exports.deleteUser = (req, res, next) => {
         next(new Error(err));
     });
 }
-
 exports.getUsers = (req, res, next) => {
 
     const order = OrderHelper.getOrder(req.query.order);
