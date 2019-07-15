@@ -1,7 +1,17 @@
 const User = require('../../models/user');
-const OrderHelper = require('../../util/order');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 const { validationResult } = require('express-validator/check');
-
+const getOrder = (sort) => {
+    switch (sort) {
+        case '1':
+            return [['createdAt', 'DESC']];
+        case '2':
+            return [['createdAt', 'ASC']];
+        default:
+            return [['id', 'ASC']];
+    }
+}
 exports.addUser = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -10,7 +20,7 @@ exports.addUser = (req, res, next) => {
             errors: errors.array()
         })
     }
-    User.create(req.query).then(user => {
+    User.create(req.body).then(user => {
         res.status(201).json({ message: 'User was added successfully' });
     }).catch(err => {
         next(new Error(err));
@@ -41,15 +51,14 @@ exports.deleteUser = (req, res, next) => {
     });
 }
 exports.getUsers = (req, res, next) => {
-
-    const order = OrderHelper.getOrder(req.query.order);
+    const order = getOrder(req.query.order);
     const limit = Number(req.query.limit) || 5;
     const page = req.query.page || 1;
     const offset = limit * (page - 1);
-    const where = {}
+    const where = req.query.role_id ? { role_id: req.query.role_id } : {};
     if (req.query.filter) {
-        where = {
-            first_name: { [Op.substring]: req.query.filter }
+        where.first_name = {
+            [Op.substring]: req.query.filter
         };
     }
     User.findAndCountAll({

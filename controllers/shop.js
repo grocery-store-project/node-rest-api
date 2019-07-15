@@ -2,13 +2,23 @@ const Product = require('../models/product');
 const Category = require('../models/category');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
-const OrderHelper = require('../util/order');
-
-
-
+const getOrder = (sort) => {
+  switch (sort) {
+    case '1':
+      return [['price', 'DESC']];
+    case '2':
+      return [['price', 'ASC']];
+    case '3':
+      return [['createdAt', 'ASC']];
+    case '4':
+      return [['createdAt', 'DESC']];
+    default:
+      return [['id', 'ASC']];
+  }
+}
 exports.getProducts = (req, res, next) => {
 
-  const order = OrderHelper.getOrder(req.query.order);
+  const order = getOrder(req.query.order);
   const limit = Number(req.query.limit) || 5;
   const page = req.query.page || 1;
   const offset = limit * (page - 1);
@@ -18,9 +28,6 @@ exports.getProducts = (req, res, next) => {
       [Op.substring]: req.query.filter
     };
   }
-  console.log(where);
-
-
   Product.findAndCountAll({
     order, limit, offset, where
   }).then(result => {
