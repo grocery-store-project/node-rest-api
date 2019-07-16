@@ -7,9 +7,11 @@ const multer = require('multer');
 const sequelize = require('./util/database');
 const multerConfig = require('./util/multer')
 
-const shopRoutes = require('./routes/shop');
+const shopProductRoutes = require('./routes/shop/products');
+const shopOrderRoutes = require('./routes/shop/orders');
 const adminProductsRoutes = require('./routes/admin/products');
 const adminUsersRoutes = require('./routes/admin/users');
+const adminOrdersRoutes = require('./routes/admin/orders');
 const authRoutes = require('./routes/auth');
 const isAuth = require('./middleware/is-auth');
 
@@ -24,9 +26,11 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-app.use('/shop', shopRoutes);
+app.use('/shop/products', shopProductRoutes);
+app.use('/shop/orders', shopOrderRoutes);
 app.use('/admin/products', isAuth, adminProductsRoutes);
 app.use('/admin/users', isAuth, adminUsersRoutes);
+app.use('/admin/orders', isAuth, adminOrdersRoutes);
 app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {

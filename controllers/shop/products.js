@@ -1,5 +1,5 @@
-const Product = require('../models/product');
-const Category = require('../models/category');
+const Product = require('../../models/product');
+const Category = require('../../models/category');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 const getOrder = (sort) => {
@@ -59,3 +59,5 @@ exports.getSingleProduct = (req, res, next) => {
     }
   })
 };
+
+
