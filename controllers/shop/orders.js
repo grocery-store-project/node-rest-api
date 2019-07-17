@@ -13,8 +13,8 @@ exports.completeOrder = (req, res, next) => {
                 order_id, product_id
             })
         })
-        OrderItem.findAll().then(orderItems => {
-            res.status(200).send(orderItems);
+        OrderItem.findAll().then(() => {
+            res.status(200).send({ msg: "Order is completed" });
         })
     })
 }
