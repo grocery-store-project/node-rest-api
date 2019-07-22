@@ -1,6 +1,6 @@
 const Order = require('../../models/order');
-const OrderItem = require('../../models/order_item');
 const Product = require('../../models/product');
+const User = require('../../models/user');
 const Sequelize = require('sequelize');
 
 
@@ -13,6 +13,9 @@ exports.getOrders = (req, res, next) => {
         include: [{
             model: Product,
             as: 'products'
+        }, {
+            model: User,
+            as: 'users'
         }]
     }).then(result => {
         res.send(result);
