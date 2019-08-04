@@ -16,9 +16,10 @@ exports.signUp = (req, res, next) => {
     const password = req.body.password;
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
+    const role_id = req.body.role_id;
     bcrypt.hash(password, 12).then(hashPass => {
         User.create({
-            email, first_name, last_name, password: hashPass
+            email, first_name, last_name, role_id, password: hashPass
         }).then(user => {
             res.status(201).json({ message: "User created successfully" })
         }).catch(err => {
@@ -33,6 +34,7 @@ exports.signUp = (req, res, next) => {
 exports.signIn = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+
     User.findOne({ where: { email } }).then(user => {
         if (!user) {
             const error = new Error("This login doesn't exists");
@@ -40,6 +42,11 @@ exports.signIn = (req, res, next) => {
             throw error;
         }
         userData = user;
+        // if (userData.role_id != 2) {
+        //     const error = new Error("You don't have access to Admin Panel");
+        //     error.statusCode = 401;
+        //     throw error;
+        // }
         return bcrypt.compare(password, user.password)
 
     }).then(isEqual => {

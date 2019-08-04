@@ -1,6 +1,8 @@
 const User = require('../../models/user');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
+const bcrypt = require('bcryptjs')
+
 const { validationResult } = require('express-validator/check');
 const getOrder = (sort) => {
     switch (sort) {
@@ -14,18 +16,31 @@ const getOrder = (sort) => {
 }
 exports.addUser = (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(422).json({
             message: 'Validation failed, entered data is incorrect',
             errors: errors.array()
         })
     }
-    User.create(req.body).then(user => {
-        res.status(201).json({ message: 'User was added successfully' });
+    const email = req.body.email;
+    const password = req.body.password;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+    const role_id = req.body.role_id;
+    bcrypt.hash(password, 12).then(hashPass => {
+        User.create({
+            email, first_name, last_name, role_id, password: hashPass
+        }).then(user => {
+            res.status(201).json({ message: "User created successfully" })
+        }).catch(err => {
+            next(new Error(err));
+
+        })
     }).catch(err => {
         next(new Error(err));
-    });
-};
+    })
+}
 
 exports.editUser = (req, res, next) => {
     const errors = validationResult(req);
