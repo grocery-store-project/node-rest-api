@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
-const sequelize = require('./util/database');
 const multerConfig = require('./util/multer')
 
 const shopProductRoutes = require('./routes/shop/products');
@@ -38,11 +37,6 @@ app.use((error, req, res, next) => {
     const message = error.message;
     res.status(status).json({ message });
 });
-sequelize
-    .sync()
-    .then(() => {
-        app.listen(process.env.PORT || 3000)
-    })
-    .catch(err => {
-        console.log(err);
-    });
+
+app.listen(process.env.PORT || 3000)
+

@@ -1,5 +1,7 @@
-const Order = require('../../models/order');
-const OrderItem = require('../../models/order_item');
+
+const db = require('../../models');
+const Order = db.Order;
+const OrderItem = db.OrderItem;
 const Sequelize = require('sequelize');
 
 exports.completeOrder = (req, res, next) => {

@@ -1,6 +1,7 @@
-const Order = require('../../models/order');
-const Product = require('../../models/product');
-const User = require('../../models/user');
+const db = require('../../models');
+const Product = db.Product;
+const Order = db.Order;
+const User = db.User;
 const getOrder = (sort) => {
     switch (sort) {
         case '3':

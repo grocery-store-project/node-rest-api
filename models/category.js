@@ -1,18 +1,10 @@
-const Sequelize = require('sequelize');
-
-const sequelize = require('../util/database');
-
-const Category = sequelize.define('category', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    name: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-});
-
-module.exports = Category;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Category = sequelize.define('Category', {
+    name: DataTypes.STRING
+  }, {});
+  Category.associate = function(models) {
+    // associations can be defined here
+  };
+  return Category;
+};

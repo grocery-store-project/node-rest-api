@@ -1,5 +1,9 @@
-const Product = require('../../models/product');
-const Category = require('../../models/category');
+const db = require('../../models');
+const Product = db.Product;
+const Category = db.Category;
+
+
+// const Category = require('../../models/category');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 const getOrder = (sort) => {
